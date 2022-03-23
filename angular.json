@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "records": "apps/records",
+    "records-api": "apps/records-api",
+    "records-api-test": "apps/records-api-test",
+    "records-e2e": "apps/records-e2e"
+  }
+}
