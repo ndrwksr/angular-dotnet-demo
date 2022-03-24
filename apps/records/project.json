@@ -85,6 +85,13 @@
         "jestConfig": "apps/records/jest.config.js",
         "passWithNoTests": true
       }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "push": true,
+        "tags": ["registry.digitalocean.com/angular-dotnet-demo/web:latest", "registry.digitalocean.com/angular-dotnet-demo/web:v1"]
+      }
     }
   },
   "tags": []

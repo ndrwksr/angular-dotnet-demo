@@ -1,1 +1,13 @@
-<angular-dotnet-demo-nx-welcome></angular-dotnet-demo-nx-welcome>
+<main>
+    <header>
+        <h1>Weather API</h1>
+    </header>
+    <body>
+        <div *ngFor="let summary of weatherSummaries">
+            <div>{{summary.date}}</div>
+            <div>{{summary.temperatureC}}</div>
+            <div>{{summary.temperatureF}}</div>
+            <div>{{summary.summary}}</div>
+        </div>
+    </body>
+</main>

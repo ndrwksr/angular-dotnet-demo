@@ -1,0 +1,120 @@
+name: "Test and Build Web & API"
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  workflow_dispatch:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - name: Install Yarn
+      run: npm install yarn -g
+
+    - name: Install dependencies
+      run: yarn
+
+    - name: Test
+      run: yarn test
+
+  build-api:
+    if: github.event_name == 'push' && contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
+    name: Build API
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install doctl 
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+    
+    - name: Log in to DO Container Registry 
+      run: doctl registry login --expiry-seconds 600
+      
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - name: Install Yarn
+      run: npm install yarn -g
+
+    - uses: actions/cache@v2
+      with:
+        path: './node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('./yarn.lock') }}
+
+    - name: Install packages
+      run: yarn install
+
+    - name: Build API Image
+      run: npx run records-api:docker
+
+  build-web:
+    if: github.event_name == 'push' && contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
+    name: Build Web
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install doctl 
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - name: Install Yarn
+      run: npm install yarn -g
+
+    - uses: actions/cache@v2
+      with:
+        path: './node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('./yarn.lock') }}
+
+    - name: Install packages
+      run: yarn install
+    
+    - name: Log in to DO Container Registry
+      run: doctl registry login --expiry-seconds 600
+
+    - name: Build Web Image
+      run: npx run records:docker

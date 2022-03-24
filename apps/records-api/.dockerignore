@@ -1,0 +1,4 @@
+# This file will be interpreted as relative to the workspace root
+
+node_modules
+apps/records-api/obj

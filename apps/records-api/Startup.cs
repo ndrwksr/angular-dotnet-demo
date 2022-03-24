@@ -23,6 +23,8 @@ namespace AngularDotnetDemo.RecordsApi
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,6 +34,19 @@ namespace AngularDotnetDemo.RecordsApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AngularDotnetDemo.RecordsApi", Version = "v1" });
             });
+
+            services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                              builder =>
+                              {
+                                  builder.WithOrigins("http://localhost:4200",
+                                                      "https://angular-dotnet-demo.ndrwksr.com");
+                              });
+        });
+
+        // services.AddResponseCaching();
+        services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +62,7 @@ namespace AngularDotnetDemo.RecordsApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

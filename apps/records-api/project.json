@@ -29,6 +29,13 @@
     },
     "lint": {
       "executor": "@nx-dotnet/core:format"
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "push": true,
+        "tags": ["registry.digitalocean.com/angular-dotnet-demo/api:latest", "registry.digitalocean.com/angular-dotnet-demo/api:v1"]
+      }
     }
   },
   "tags": []
