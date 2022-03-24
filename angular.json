@@ -5,5 +5,12 @@
     "records-api": "apps/records-api",
     "records-api-test": "apps/records-api-test",
     "records-e2e": "apps/records-e2e"
+  },
+  "docker": {
+    "executor": "@nx-tools/nx-docker:build",
+    "options": {
+      "push": true,
+      "tags": ["api:latest", "api:v1"]
+    }
   }
 }
