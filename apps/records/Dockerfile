@@ -34,4 +34,5 @@ RUN yarn nx run records:build
 
 # Prod
 FROM nginx:alpine
+EXPOSE 80
 COPY --from=build /angular-dotnet-demo/dist/apps/records /usr/share/nginx/html

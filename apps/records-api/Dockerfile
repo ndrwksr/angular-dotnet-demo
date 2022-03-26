@@ -40,4 +40,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
 WORKDIR /app
 COPY --from=build-env /angular-dotnet-demo/apps/records-api/out .
+EXPOSE 80
 ENTRYPOINT ["dotnet", "AngularDotnetDemo.RecordsApi.dll"]

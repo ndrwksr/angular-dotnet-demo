@@ -1,75 +1,55 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-
 namespace AngularDotnetDemo.RecordsApi
 {
-    public class Startup
+  using AngularDotnetDemo.RecordsApi.Services;
+  using Microsoft.AspNetCore.Builder;
+  using Microsoft.AspNetCore.Hosting;
+  using Microsoft.Extensions.Configuration;
+  using Microsoft.Extensions.DependencyInjection;
+  using Microsoft.Extensions.Hosting;
+  using Microsoft.OpenApi.Models;
+
+  public class Startup
+  {
+    private readonly string allowOriginsKey = "allow_origins_key";
+    private readonly string title = "AngularDotnetDemo.RecordsApi";
+    private readonly string version = "v1";
+
+    public IConfiguration Configuration { get; }
+
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AngularDotnetDemo.RecordsApi", Version = "v1" });
-            });
-
-            services.AddCors(options =>
-        {
-            options.AddPolicy(name: MyAllowSpecificOrigins,
-                              builder =>
-                              {
-                                  builder.WithOrigins("http://localhost:4200",
-                                                      "https://angular-dotnet-demo.ndrwksr.com");
-                              });
-        });
-
-        // services.AddResponseCaching();
-        services.AddControllers();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AngularDotnetDemo.RecordsApi v1"));
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseCors(MyAllowSpecificOrigins);
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
+      this.Configuration = configuration;
     }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+      services.AddControllers();
+      services.AddSwaggerGen(c => c.SwaggerDoc(this.version, new OpenApiInfo { Title = this.title, Version = this.version }));
+
+      string webOrigin = this.Configuration["WebOrigin"];
+      services.AddCors(options =>
+        options.AddPolicy(
+          name: this.allowOriginsKey,
+          builder => builder.WithOrigins(webOrigin)));
+
+      services.Add(new ServiceDescriptor(typeof(IRecordService), new MemoryRecordService()));
+      services.AddControllers();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+      if (env.IsDevelopment())
+      {
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{this.version}/swagger.json", $"{this.title} {this.version}"));
+      }
+
+      app.UseHttpsRedirection();
+      app.UseRouting();
+      app.UseCors(this.allowOriginsKey);
+      app.UseAuthorization();
+      app.UseEndpoints(endpoints => endpoints.MapControllers());
+    }
+  }
 }
