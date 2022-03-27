@@ -1,0 +1,37 @@
+[
+    {
+        "id": "1",
+        "title": "Thriller",
+        "author": "Michael Jackson",
+        "published": "1982-11-30",
+        "copiesSold": 70923843
+    },
+    {
+        "id": "2",
+        "title": "Back in Black",
+        "author": "AC/DC",
+        "published": "1980-07-25",
+        "copiesSold": 50890331
+    },
+    {
+        "id": "3",
+        "title": "The Bodyguard",
+        "author": "Whitney Houston",
+        "published": "1992-11-17",
+        "copiesSold": 45593283
+    },
+    {
+        "id": "4",
+        "title": "Bat Out of Hell",
+        "author": "Meat Loaf",
+        "published": "1977-10-11",
+        "copiesSold": 44931856
+    },
+    {
+        "id": "5",
+        "title": "Their Greatest Hits (1971-1975)",
+        "author": "Eagles",
+        "published": "1976-02-17",
+        "copiesSold": 44923774
+    }
+]

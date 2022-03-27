@@ -5,7 +5,9 @@
   "targets": {
     "build": {
       "executor": "@nx-dotnet/core:build",
-      "outputs": ["dist/apps/records-api"],
+      "outputs": [
+        "dist/apps/records-api"
+      ],
       "options": {
         "configuration": "Debug",
         "noDependencies": true
@@ -34,7 +36,10 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "push": true,
-        "tags": ["registry.digitalocean.com/angular-dotnet-demo/api:latest", "registry.digitalocean.com/angular-dotnet-demo/api:v1"]
+        "tags": [
+          "registry.digitalocean.com/angular-dotnet-demo/api:latest",
+          "registry.digitalocean.com/angular-dotnet-demo/api:v1"
+        ]
       }
     }
   },

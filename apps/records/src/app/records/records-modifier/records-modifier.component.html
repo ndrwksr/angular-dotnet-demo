@@ -1,0 +1,8 @@
+<div class="center">
+  <angular-dotnet-demo-records-form
+    *ngIf="selectedRecord"
+    [title]="title ?? ''"
+    (submitForm)="updateRecord($event)"
+    [initialValue]="selectedRecord"
+  ></angular-dotnet-demo-records-form>
+</div>

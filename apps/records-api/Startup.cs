@@ -30,7 +30,7 @@ namespace AngularDotnetDemo.RecordsApi
       services.AddCors(options =>
         options.AddPolicy(
           name: this.allowOriginsKey,
-          builder => builder.WithOrigins(webOrigin)));
+          builder => builder.WithMethods("POST", "GET", "PUT", "DELETE", "OPTIONS", "HEAD").WithHeaders("content-type").WithOrigins(webOrigin)));
 
       services.Add(new ServiceDescriptor(typeof(IRecordService), new MemoryRecordService()));
       services.AddControllers();

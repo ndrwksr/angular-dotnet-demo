@@ -1,0 +1,30 @@
+<div class="center">
+  <form *ngIf="records && !selectedRecord">
+    <h2>Select a Record</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Record Title</mat-label>
+      <input
+        type="text"
+        placeholder="Type the title of a record"
+        aria-label="Record"
+        matInput
+        [formControl]="select"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="optionWasSelected($event.option)"
+        [displayWith]="getOptionText"
+      >
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option.title }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <div *ngIf="!records">Loading...</div>
+  <router-outlet></router-outlet>
+</div>

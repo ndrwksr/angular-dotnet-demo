@@ -1,0 +1,88 @@
+<form
+  *ngIf="form"
+  [formGroup]="form"
+  #formDirective="ngForm"
+  (ngSubmit)="submit(form, formDirective)"
+>
+  <div class="form-contents">
+    <h2>{{ title }}</h2>
+
+    <!--Title Field -->
+    <mat-form-field appearance="standard">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        appearance="fill"
+        placeholder="Title"
+        formControlName="title"
+        #titleInput
+      />
+      <mat-error *ngIf="form.controls['title'].errors?.['required']">
+        Title is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!--Author Field -->
+    <mat-form-field appearance="standard">
+      <mat-label>Author</mat-label>
+      <input
+        matInput
+        appearance="fill"
+        placeholder="Author"
+        formControlName="author"
+        #authorInput
+      />
+      <mat-error *ngIf="form.controls['author'].errors?.['required']">
+        Author is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!--Published Field -->
+    <mat-form-field appearance="standard">
+      <mat-label>Published</mat-label>
+      <input
+        matInput
+        [matDatepicker]="published"
+        formControlName="published"
+        #publishedInput
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="published"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #published></mat-datepicker>
+      <mat-error *ngIf="form.controls['published'].errors?.['required']">
+        Published is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!--Copies Sold Field -->
+    <mat-form-field appearance="standard">
+      <mat-label>Copies Sold</mat-label>
+      <input
+        matInput
+        appearance="fill"
+        placeholder="Copies Sold"
+        formControlName="copiesSold"
+        #copiesSoldInput
+      />
+      <mat-error *ngIf="form.controls['copiesSold'].errors?.['required']">
+        Copies sold is <strong>required</strong>
+      </mat-error>
+      <mat-error
+        *ngIf="form.controls['copiesSold'].errors?.['min'] || form.controls['copiesSold'].errors?.['pattern']"
+      >
+        Copies sold must be a positive number
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!form.valid"
+    >
+      Submit
+    </button>
+  </div>
+</form>

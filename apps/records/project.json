@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/records",
         "index": "apps/records/src/index.html",
@@ -14,8 +16,14 @@
         "polyfills": "apps/records/src/polyfills.ts",
         "tsConfig": "apps/records/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/records/src/favicon.ico", "apps/records/src/assets"],
-        "styles": ["apps/records/src/styles.scss"],
+        "assets": [
+          "apps/records/src/favicon.ico",
+          "apps/records/src/assets"
+        ],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "apps/records/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -80,7 +88,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/records"],
+      "outputs": [
+        "coverage/apps/records"
+      ],
       "options": {
         "jestConfig": "apps/records/jest.config.js",
         "passWithNoTests": true
@@ -90,7 +100,10 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "push": true,
-        "tags": ["registry.digitalocean.com/angular-dotnet-demo/web:latest", "registry.digitalocean.com/angular-dotnet-demo/web:v1"]
+        "tags": [
+          "registry.digitalocean.com/angular-dotnet-demo/web:latest",
+          "registry.digitalocean.com/angular-dotnet-demo/web:v1"
+        ]
       }
     }
   },
